@@ -1,4 +1,12 @@
 import random
+import sys
+import pygame
+
+pygame.init()
+
+WINDOW_SIZE = [540, 540]
+screen = pygame.display.set_mode(WINDOW_SIZE)
+pygame.display.set_caption("Sudoku")
 
 class Sudoku:
     def __init__(self):
