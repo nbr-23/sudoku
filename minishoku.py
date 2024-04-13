@@ -42,47 +42,77 @@ class Sudoku:
             for j in range(3):
                 self.grid[row + i][col + j] = numbers[index]
                 index += 1
+                
+    
 
-    """
-    [9, 3, 2, 1, 1, 1, 1, 1, 1]
-    [1, 4, 8, 1, 1, 1, 1, 1, 1]
-    [7, 6, 5, 1, 1, 1, 1, 1, 1]
-    [1, 1, 1, 6, 4, 5, 1, 1, 1]
-    [1, 1, 1, 1, 8, 2, 1, 1, 1]
-    [1, 1, 1, 9, 3, 7, 1, 1, 1]
-    [1, 1, 1, 1, 1, 1, 7, 4, 2]
-    [1, 1, 1, 1, 1, 1, 5, 9, 8]
-    [1, 1, 1, 1, 1, 1, 3, 6, 1]
-    """
+    def is_valid(self, row, col, num):
+        
+        # Check if the number exists in the row
+        for i in range(9):
+            if self.grid[row][i] == num:
+                return False
+        # Check if the number exists in the column
+        for i in range(9):
+            if self.grid[i][col]== num:
+                return False
+                
+        # Check if the number exists in the 3x3 grid 
+        start_row = row - row % 3
+        start_col = col - col % 3
+        for i in range(3):
+            for j in range(3):
+                if self.grid[start_row + i][start_col + j] == num:
+                    return False
+                
+        return True
+        
+    
     def solve_sudoku(self):
         for row in range(9):
             for col in range(9):
                 if self.grid[row][col] == 0:
                     for num in range(1, 10):
-                        # Function to check if valid number => if valid_number ..
-                        self.grid[row][col] = num
-                        if self.solve_sudoku():
-                            return True
-                        self.grid[row][col] = 0
+                        if self.is_valid(row, col, num):
+                            self.grid[row][col] = num
+                            if self.solve_sudoku():
+                                return True
+                            self.grid[row][col] = 0
                     return False
         return True
     
-        
-    # Create a function ro check if the number is valid 
-    # Create a function to remove some random numbers 
-    # Part one done ===
     
-    #Part two add PyGame
+    """
+    [8, 9, 0, 0, 0, 0, 0, 0, 7]
+    [6, 5, 7, 3, 0, 9, 0, 0, 2]
+    [1, 2, 4, 6, 5, 7, 0, 0, 3]
+    [0, 0, 5, 9, 6, 0, 8, 0, 4]
+    [0, 0, 0, 0, 4, 2, 0, 0, 0]
+    [0, 6, 0, 0, 0, 8, 0, 0, 0]
+    [5, 0, 2, 7, 9, 0, 4, 1, 8]
+    [7, 0, 0, 8, 0, 0, 3, 0, 0]
+    [9, 8, 0, 0, 0, 5, 7, 2, 6]
+    """
+    def remove_numbers(self, num_to_remove):
+        for _ in range(num_to_remove):
+            row = random.randint(0, 8)
+            col = random.randint(0, 8)
+            while self.grid[row][col] == 0:
+                row = random.randint(0, 8)
+                col = random.randint(0, 8)
+            self.grid[row][col] = 0
+    
+
+    
     
 sudoku = Sudoku()
 
-
 solution_found = sudoku.solve_sudoku()
 
-
 if solution_found:
-    print("Sudoku solved ! ")
+    sudoku.remove_numbers(40)  # Example: Remove 50 numbers to create a puzzle
+    
+    print("Sudoku puzzle:")
     for row in sudoku.grid:
         print(row)
 else:
-    print("Not solved..")
+    print("Unable to solve Sudoku.")
